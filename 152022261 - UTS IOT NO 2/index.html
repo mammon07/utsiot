@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>152022261</title>
+    <style>
+        /* Styling dasar untuk tampilan lebih menarik */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        #output {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 8px 0;
+        }
+        
+        h3 {
+            color: #2980b9;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            margin: 5px 0;
+            padding: 10px;
+            color: #333;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div id="output">
+        <h1>UTS 152022261 IHZA</h1>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('http://localhost:3000/data');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+
+                const output = document.getElementById('output');
+                output.innerHTML += `
+                    <p>Suhu Maks: <strong>${data.suhumax}°C</strong></p>
+                    <p>Suhu Min: <strong>${data.suhumin}°C</strong></p>
+                    <p>Suhu Rata-rata: <strong>${data.suhurata}°C</strong></p>
+
+                    <h3>Nilai Suhu dan Humidity Maksimum</h3>
+                    <ul>
+                        ${data.nilai_suhu_max_humid_max.map(item => `
+                            <li>
+                                <strong>ID:</strong> ${item.idx}, 
+                                <strong>Suhu:</strong> ${item.suhu}°C, 
+                                <strong>Humidity:</strong> ${item.humid}%, 
+                                <strong>Kecerahan:</strong> ${item.kecerahan}, 
+                                <strong>Timestamp:</strong> ${item.timestamp}
+                            </li>
+                        `).join('')}
+                    </ul>
+
+                    <h3>Month Year Max</h3>
+                    <ul>
+                        ${data.month_year_max.map(item => `
+                            <li>${item.month_year}</li>
+                        `).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('output').innerText = 'Failed to load data';
+            }
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
